@@ -4,6 +4,8 @@ class Groups::MessagesController < ApplicationController
 
   def index
     @message  = Message.new
+    @reload_messages = @messages.offset(params[:lastId])
+
     respond_to do |format|
       format.html
       format.json

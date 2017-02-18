@@ -1,8 +1,7 @@
-json.messages @messages do |message|
+json.messages @reload_messages do |message|
   json.name   message.user.name
   json.time   message.created_at.to_s(:default)
   json.body   message.body
   json.image  message.image.url
-  json.id     message.id
 end
-json.last_id @messages.last.id
+json.lastId  @reload_messages.last.try(:id)

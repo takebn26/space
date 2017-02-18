@@ -1,5 +1,5 @@
 $(function(){
-  var last_id = 0;
+  var lastId;
 
   function insertMessage(message) {
 
@@ -41,15 +41,14 @@ $(function(){
     $.ajax({
       url: './messages',
       type: 'get',
+      data: lastId,
       dataType: 'json'
     })
     .done(function(data){
       $.each(data.messages, function(i, message){
-        if (last_id < message.id){
-          insertMessage(message);
-        };
+        insertMessage(message);
       });
-      last_id = data.last_id;
+      lastId = data.lastId;
     });
   };
 
