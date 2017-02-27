@@ -5,3 +5,4 @@ json.messages @reload_messages do |message|
   json.image  message.image.url
 end
 json.lastId  @reload_messages.last.try(:id)
+

@@ -38,6 +38,6 @@ class Groups::MessagesController < ApplicationController
   end
 
   def set_messages
-    @messages = current_user.messages
+    @messages = @group.messages
   end
 end

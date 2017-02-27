@@ -1,5 +1,7 @@
 $(function(){
-  var lastId;
+  var currentPath = window.location.pathname.split('/').pop();
+  var lastId = 0;
+  var reloadMessages;
 
   function insertMessage(message) {
 
@@ -36,23 +38,25 @@ $(function(){
     }, 'slow', 'swing');
   };
 
-
-  function reloadMessages () {
-    $.ajax({
-      url: './messages',
-      type: 'get',
-      data: lastId,
-      dataType: 'json'
-    })
-    .done(function(data){
-      $.each(data.messages, function(i, message){
-        insertMessage(message);
-      });
-      lastId = data.lastId;
-    });
+  function reloadMessages() {
+    if (currentPath == 'messages') {
+    setInterval(
+      $.ajax({
+        url: './messages',
+        type: 'get',
+        data: lastId,
+        dataType: 'json'
+      })
+      .done(function(data){
+        $.each(data.messages, function(i, message){
+          insertMessage(message);
+        });
+        lastId = data.lastId;
+      }), 5000);
+    };
   };
 
-  setInterval(reloadMessages, 3000);
+  reloadMessage();
 
   $('#message_image').on('change', function() {
     $('#message-form').submit();
