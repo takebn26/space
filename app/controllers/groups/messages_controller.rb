@@ -4,7 +4,6 @@ class Groups::MessagesController < ApplicationController
 
   def index
     @message  = Message.new
-    @reload_messages = @group.messages.where('id > ?', params[:lastId])
 
     respond_to do |format|
       format.html

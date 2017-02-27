@@ -38,25 +38,26 @@ $(function(){
     }, 'slow', 'swing');
   };
 
-  function reloadMessages() {
-    if (currentPath == 'messages') {
-    setInterval(
-      $.ajax({
-        url: './messages',
-        type: 'get',
-        data: lastId,
-        dataType: 'json'
-      })
-      .done(function(data){
-        $.each(data.messages, function(i, message){
-          insertMessage(message);
-        });
-        lastId = data.lastId;
-      }), 5000);
-    };
-  };
+function reloadMessages() {
+  setInterval(
+    $.ajax({
+      url: './messages',
+      type: 'get',
+      data: lastId,
+      dataType: 'json'
+    })
+    .done(function(data){
+      $.each(data.messages, function(i, message){
+        insertMessage(message);
+      });
+      lastId = data.lastId;
+    }), 5000
+  );
+};
 
-  reloadMessage();
+  if (currentPath == 'messages') {
+    reloadMessage();
+  };
 
   $('#message_image').on('change', function() {
     $('#message-form').submit();
