@@ -4,9 +4,11 @@ $(function() {
                           .split('/')
                           .pop();
 
+  var lastId = $('.chat-main__message').last().data('id');
+
   function insertMessage(message) {
     var insertImage = message.image ?
-      `<img class="chat-main__message-body-image" src="${message.image}">` : '';
+      `<img class="chat-main__message-body-image" src="${message.image}">` : null;
 
     var html = `<li class="chat-main__message clearfix" data-id=${message.id}>
       <div class="chat-main__message-name">${message.name}</div>
@@ -31,10 +33,8 @@ $(function() {
   }
 
   function fetchDiff() {
-    console.log($('.chat-main__message').last().data('id'))
-    lastId = $('.chat-main__message').last().data('id') || 0;
     $.ajax({
-      url: './messages',
+      url: './messgaes',
       method: 'GET',
       data: {
         last_id: lastId,
@@ -44,12 +44,14 @@ $(function() {
       if (data.length != 0) {
         $.each(data.messages, function(i, message) {
           insertMessage(message);
+          lastId = data.lastId;
         });
       }
     });
   }
 
   function reloadMessage() {
+    lastId = $('.chat-main__message').last().data('id');
     if (currentPath == 'messages') {
       setInterval(fetchDiff, 5000);
     }
@@ -63,20 +65,21 @@ $(function() {
   $('#message-form').on('submit', function(e) {
     e.preventDefault();
     formdata = new FormData($(this).get(0));
+
     $.ajax ({
       url: './messages',
       type: 'post',
       data: formdata,
       dataType: 'json',
-      context: this,
+      context: $(this),
       processData: false,
       contentType: false,
     })
     .done( function(data) {
       insertMessage(data);
-      insertNotification(data.notice);
       scrollToBottom();
-      this.reset();
+      insertNoticeMessage(data.notice);
+      this[0].reset();
     })
     .fail( function() {
       alert('メッセージ送信失敗');

@@ -7,7 +7,9 @@ class Groups::MessagesController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json
+      format.json{
+        @messages = @group.messages.where('id > ?', params[:last_id])
+      }
     end
   end
 
